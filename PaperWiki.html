@@ -261,6 +261,10 @@ Error message and password prompt
 
 <li>May 9th - Research basics</li>
 
+<li>SIMBICON: Simple Biped Locomotion Control - 2007</li>
+
+<li>Spectral Style Transfer for Human Motion between Independent Actions - 2016</li>
+
 <li>Table of Contents</li>
 
 <li>Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016</li>
@@ -6478,7 +6482,7 @@ Error message and password prompt
 <div created="20160505050837537" modified="20160505050848142" title="$:/SiteTitle">
 <pre>My Research Papers Wiki</pre>
 </div>
-<div created="20160505051323075" modified="20160505055944727" title="$:/state/showeditpreview">
+<div created="20160505051323075" modified="20160516230741465" title="$:/state/showeditpreview">
 <pre>no</pre>
 </div>
 <div created="20160509183652604" modified="20160509183652604" title="$:/state/tab-1749438307">
@@ -6487,7 +6491,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[May 16th - Rag Doll Beginnings]] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Spectral Style Transfer for Human Motion between Independent Actions - 2016]] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7025,10 +7029,54 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Add simbicon swing leg feedback to achieve balanced stepping
 * MIT Hopping robot Mark</pre>
 </div>
-<div created="20160505050941382" modified="20160516223548504" title="Table of Contents">
+<div created="20160516225034391" modified="20160517205124789" tags="Controls" title="SIMBICON: Simple Biped Locomotion Control - 2007">
+<pre>!! Motivation
+* Physics based simulation and control is difficult for biped locomotion due to unstability, underactuation, &amp; high-dimensions
+* Keyframing does not scale well to all scenarios
+!! Proposed Solution
+* To use A control strategy which includes a finite state machine, torso and swing-hip control, and balance feedback
+* Finite State Machine
+** Each state has its own target pose
+** Transitions happen after an elapsed time or after foot contact.
+** At any given state, joints apply torques computed by Proportional Derivative Control $$\tau = k_p(\theta_d - \theta) - k_d(\dot{\theta})$$ to drive joint to desired local angle
+** Stance hip and swing hip are handled separately
+*** Orientation of torso with respect to the world frame. Use a virtual PD Controller to compute net torso torque
+*** Use virtual PD Controller to control swing hip with respect to World Coordinate frame.
+*** Virtual torques must be realized with internal torques. Requires stance hip torque $$\tau_A = -\tau{torso} - \tau_B$$
+* Balance feedback applied to swing foot placement
+* Use feedback error learning to anticipate the torque needed for the torso to stop bobbing due to reaction to swing hip torque.
+!! Experimental Setup
+!! Results</pre>
+</div>
+<div created="20160526174901246" modified="20160526183004463" tags="Controls" title="Spectral Style Transfer for Human Motion between Independent Actions - 2016">
+<pre>!! Motivation
+* State of the Art methods require independent actions to be present in a style database to perform style transfer
+* Stylization of human actions
+* Style transfer is to make an action have different styles without capturing all of the different styles
+* Pipeline for motion captured styles is expensive and time consuming
+!! Proposed Solution
+* Novel spectral human motion style transfer method which not only handles heterogenous motion sequences but also transfers style between independent actions
+!! Method
+* Treat human motion in the spectral domain
+* Observe a different action in target style and source style. Apply the difference in the spectral domain to the desired source action to get the target style for the desired action.
+** Skeletal power helps differentiate between action similarity since it is less sensitive to style.
+** Assume phases are the same for all joints
+** Works well for periodic actions but poorly for heterogenous actions
+* Solve the heterogenous problem with windowing to decouple parts of the clip distant in time domain
+* Introduce smoothness term to ensure continuity between stylized time steps
+* For real time style transfer, solve optimization equation at each time step in frequency domain and reconstruct in time domain
+!! Evaluation and Discussion
+* Compare method with Xia and Hsu to generate neutral actions, significantly outperformed
+* Qualitative tests conducted on Mechanical Turk
+</pre>
+</div>
+<div created="20160505050941382" modified="20160526183020974" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
+!! Controls
+* [[SIMBICON: Simple Biped Locomotion Control - 2007]]
+* [[Spectral Style Transfer for Human Motion between Independent Actions - 2016]]
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
