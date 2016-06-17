@@ -7048,7 +7048,7 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 !! Experimental Setup
 !! Results</pre>
 </div>
-<div created="20160526174901246" modified="20160526183004463" tags="Controls" title="Spectral Style Transfer for Human Motion between Independent Actions - 2016">
+<div created="20160526174901246" modified="20160527184616238" tags="Controls" title="Spectral Style Transfer for Human Motion between Independent Actions - 2016">
 <pre>!! Motivation
 * State of the Art methods require independent actions to be present in a style database to perform style transfer
 * Stylization of human actions
@@ -7063,6 +7063,7 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ** Assume phases are the same for all joints
 ** Works well for periodic actions but poorly for heterogenous actions
 * Solve the heterogenous problem with windowing to decouple parts of the clip distant in time domain
+** Window is a cosine window where it is the maximum at the time t and falls off to 0.
 * Introduce smoothness term to ensure continuity between stylized time steps
 * For real time style transfer, solve optimization equation at each time step in frequency domain and reconstruct in time domain
 !! Evaluation and Discussion
