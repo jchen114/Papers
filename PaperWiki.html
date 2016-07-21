@@ -255,6 +255,10 @@ Error message and password prompt
 
 <li>Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016</li>
 
+<li>Continuation Methods for Adapting Simulated Skills - 2008</li>
+
+<li>Draft of 'New Tiddler'</li>
+
 <li>May 16th - Rag Doll Beginnings</li>
 
 <li>May 3rd - Beginnings of Research term</li>
@@ -6482,7 +6486,7 @@ Error message and password prompt
 <div created="20160505050837537" modified="20160505050848142" title="$:/SiteTitle">
 <pre>My Research Papers Wiki</pre>
 </div>
-<div created="20160505051323075" modified="20160516230741465" title="$:/state/showeditpreview">
+<div created="20160505051323075" modified="20160720184144192" title="$:/state/showeditpreview">
 <pre>no</pre>
 </div>
 <div created="20160509183652604" modified="20160509183652604" title="$:/state/tab-1749438307">
@@ -6491,7 +6495,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Spectral Style Transfer for Human Motion between Independent Actions - 2016]] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Draft of 'New Tiddler']] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -6999,6 +7003,56 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Hierarchical Tasks
 ** All implemented algorithms achieve poor performance</pre>
 </div>
+<div created="20160720184040045" modified="20160720230608217" tags="Controls" title="Continuation Methods for Adapting Simulated Skills - 2008">
+<pre>! Motivation
+* Data-driven approaches for human action mimicry require vast amounts of data. 
+* There is a need for generalization and extrapolation from example motions or controllers
+* Discover the parameters needed to perform a more difficult action
+* Adapt control strategies to observable changes in the environment
+! Proposed Solution
+* Given some initial set of parameters for walking, $$\theta_0$$ find the parameters $$\theta_T$$ which achieve walking in the modified physical environment
+* Continuation variable $$\gamma$$ represents parameterization of the change
+* Style objective function $$\theta^*(\gamma)$$ defines unique optimal solution since many solutions may exist for $$\gamma$$
+* Several alternatives for solving continuation problem using:
+** gradient-descent
+** local-stochastic search
+** hybrid continuation methods
+* The above methods offer different degrees of coupling between style optimization and continuation advancement
+!! Grad
+* Gradient descent used to optimize style of motion according to style objective function
+!! Hybrid
+* Improves upon GRAD by using linearly-predicted new parameter value as a starting point after continuation advancement
+* Allow adaptations to the continuation step. Sample the trust region for the linear prediction
+* Allows for large rapid advancement when possible as well as smaller changes
+!! Stochastic
+* Local stochastic search. An added term is added to the objective function to reward continuation depending on how much reward to give for continuation.
+* Sample points are drawn in a uniform random fashion from a given window around the current solution and selected greedily.
+! Evaluation criteria
+* how quickly does the method advance the continuation
+* Examine the quality of the final solutions with reference to the objective function
+! Experimental Setup
+* Different tasks include:
+** Step up - Stairs. Cont variable is the step height
+** Step over - Obstacle or sill of variable height. Cont variable is the obstacle height
+** Push - Cont variable is the density
+** Hill - Cont variable is the angle of the incline
+** Ice - Cont variable is the coefficient of friction
+* Each task changes what the continuation variable is. There is a fixed delta for the continuation variable and the parameters are updated accordingly.
+! Results
+* Hybrid performed well for all of the tasks. 
+* Sometimes the stochastic methods are stalled because the continuation incentive is insufficient to compensate for the required deviation in style.
+* Difficult to tune and slow to advance the continuation parameter when using the rewards continuation term. 
+** Too small of a weight on the term causes no advancement since the method doesn't want to deviate too much from its initial parameters.
+** Too large of a weight on the term causes rapid greedy continuation and creates erratic motions and non-smoothness</pre>
+</div>
+<div created="20160720234236676" draft.of="New Tiddler" draft.title="Robust Task-based Control Policies for Physics-based Characters - 2009" modified="20160720234404766" tags="Controls" title="Draft of 'New Tiddler'">
+<pre>! Motivation
+* 
+! Proposed Solution
+! Experimental Setup
+! Results
+! Discussion</pre>
+</div>
 <div created="20160516220713629" modified="20160516222905684" tags="" title="May 16th - Rag Doll Beginnings">
 <pre>!! TODO
 * Build a 7 or 12 link person model
@@ -7071,13 +7125,15 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Qualitative tests conducted on Mechanical Turk
 </pre>
 </div>
-<div created="20160505050941382" modified="20160526183020974" title="Table of Contents">
+<div created="20160505050941382" modified="20160720234320890" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
 !! Controls
 * [[SIMBICON: Simple Biped Locomotion Control - 2007]]
 * [[Spectral Style Transfer for Human Motion between Independent Actions - 2016]]
+* [[Continuation Methods for Adapting Simulated Skills - 2008]]
+* [[Robust Task-based Control Policies for Physics-based Characters - 2009]]
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
