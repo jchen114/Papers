@@ -257,13 +257,13 @@ Error message and password prompt
 
 <li>Continuation Methods for Adapting Simulated Skills - 2008</li>
 
-<li>Draft of 'New Tiddler'</li>
-
 <li>May 16th - Rag Doll Beginnings</li>
 
 <li>May 3rd - Beginnings of Research term</li>
 
 <li>May 9th - Research basics</li>
+
+<li>Robust Task-based Control Policies for Physics-based Characters - 2009</li>
 
 <li>SIMBICON: Simple Biped Locomotion Control - 2007</li>
 
@@ -6495,7 +6495,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Draft of 'New Tiddler']] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Robust Task-based Control Policies for Physics-based Characters - 2009]] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7045,14 +7045,6 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ** Too small of a weight on the term causes no advancement since the method doesn't want to deviate too much from its initial parameters.
 ** Too large of a weight on the term causes rapid greedy continuation and creates erratic motions and non-smoothness</pre>
 </div>
-<div created="20160720234236676" draft.of="New Tiddler" draft.title="Robust Task-based Control Policies for Physics-based Characters - 2009" modified="20160720234404766" tags="Controls" title="Draft of 'New Tiddler'">
-<pre>! Motivation
-* 
-! Proposed Solution
-! Experimental Setup
-! Results
-! Discussion</pre>
-</div>
 <div created="20160516220713629" modified="20160516222905684" tags="" title="May 16th - Rag Doll Beginnings">
 <pre>!! TODO
 * Build a 7 or 12 link person model
@@ -7082,6 +7074,49 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ** 2 joints at the hip 1 for swing and one for stance
 * Add simbicon swing leg feedback to achieve balanced stepping
 * MIT Hopping robot Mark</pre>
+</div>
+<div created="20160720234236676" modified="20160721223833144" tags="Controls" title="Robust Task-based Control Policies for Physics-based Characters - 2009">
+<pre>! Motivation
+* To create natural purposeful motions by Integrating individual skills
+*  Difficult problem because of many possible character states and high dimensionality
+* Demonstrate optimized control policies for multiple tasks:
+** Go-to-heading
+** Go-to-point
+** Go-to-point-with-heading
+** Heading-and-speed
+* Develop physics-based characters to cope with significant physical interaction with the environment during the motion such as perturbation etc.
+! Proposed Solution
+* Design N controllers that comprise the action vocabulary available to the control policy
+* Control policy guides motion to achieve the task
+* State exploration state samples dynamics of character in process as different actions are applied
+* Using sampled dynamics and task description, compute optimized control policy
+* Forego deliberate-and-precise foot placement 
+* Trusted states are treated as starting points for structure, constrained exploration of state space.
+* State exploration begins at a set of trusted states T and exploring the application of all possible actions and add state-action-result tuple as $$(s,a,s')$$ if
+** $$s'$$ needs to be sufficiently close to one of the trusted states.
+** $$s'$$ rejected if not considered a novel state
+* Determine how the dynamics of the character affect the task.
+* Compute the effect of each action on the task state for every dynamics tuple.
+** $$(s,w,a,s',w') \equiv (g,a,g') $$
+* Use fitted value iteration to compute the policy. 
+* Estimate the value of a query point by using KNN and multilinear interpolation
+* Store optimal action computed for sample point $$g_{ij}$$. At run time, for the query point $$g_q = (s_q, w_q)$$, the control policy selects action associated with $$g_{ij}$$ where the state and task state are closest to the query states and task
+* Trusted states are sampled from limit-cycle states for several actions i.e running, walking
+* &quot;State exploration is done once trusted states are found not whilte agent is interacting in the environment&quot;
+* &quot;During the task, does the agent have to be exactly in a trusted state in order to get a reward of 1 or does it have to be within some range?&quot;
+! Experimental Setup
+* Different tasks have different reward functions
+* Task states are different for each task as well
+** Task states are sampled more densely around origin and the goal
+! Results
+* Able to achieve natural looking motions.
+* Looks good!
+! Discussion
+* Hand designing controllers is hard
+* Hand designed controllers are usually initialization dependent and do not take into account many external variables.
+* Optimized controllers outperform hand designed controllers
+* Optimized controllers avoid failure-prone transitions
+* Character state at any point should never stray too far from example states that have been observed during state exploration phase</pre>
 </div>
 <div created="20160516225034391" modified="20160517205124789" tags="Controls" title="SIMBICON: Simple Biped Locomotion Control - 2007">
 <pre>!! Motivation
