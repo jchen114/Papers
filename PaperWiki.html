@@ -265,6 +265,8 @@ Error message and password prompt
 
 <li>Robust Task-based Control Policies for Physics-based Characters - 2009</li>
 
+<li>Sampling-based Contact-rich Motion Control - 2010</li>
+
 <li>SIMBICON: Simple Biped Locomotion Control - 2007</li>
 
 <li>Spectral Style Transfer for Human Motion between Independent Actions - 2016</li>
@@ -6495,7 +6497,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Robust Task-based Control Policies for Physics-based Characters - 2009]] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Sampling-based Contact-rich Motion Control - 2010]] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7118,6 +7120,50 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Optimized controllers avoid failure-prone transitions
 * Character state at any point should never stray too far from example states that have been observed during state exploration phase</pre>
 </div>
+<div created="20160722001727142" modified="20160722200933989" tags="Controls" title="Sampling-based Contact-rich Motion Control - 2010">
+<pre>! Motivation
+* Contact-rich motion is hard to capture and implement
+* Requires a lot of post processing
+* Motion capture data may not respond well within certain environments
+! Proposed Solution
+* Reconstruct control  underlying a motion by casting it as a search problem that seeks to follow a given reference trajectory
+* Derivative optimization are sometimes hard or impossible to compute. 
+* Use sampling-based approaches instead 
+* Sampling-based method's stochastic nature of solution exhibit a degree of motion variation
+* Sampling schemes can potentially discover new strategies, given enough computational resources
+* Easy to parallelize
+! Experimental Setup
+* Acquire motion capture data through online database and self captured motion 
+* Pose = aggregation of all internal joint angles and root orientation at a particular time
+* Sample = pose displacement, when added to a pose forms a new pose
+* State = contains position and velocity info of system
+* From some starting state $$s_s$$ try to drive the state towards the state $$s_t$$ given by mocap using PD-servos. This will likely fail.
+* Sample the vicinity of the poses associated with $$s_t$$ to try to get something close to that and select the one that minimizes the cost function and iterate again
+* Save samples at each iteration to make algorithm more far sighted
+* At the end, backtrack $$nSave$$ paths and select path of minimal cost as final sample sequence
+* Compute an offset to reference target to approximate feedforward torques since PD-controllers never fully reach their desired angle.
+* Rely on sampling to generate appropriate toruqes that compensate for noise
+* Sample randomly from uniform distribution within hypercube around seed
+* Follow principle of diversification to select samples to save.
+* Samples should cover an appropriate range of costs but lower cost should be favored
+* Discard samples lieing in top 40% of cost distribution
+* Samples with closest cost to some transformation $$f(x) = cost_{min} + (cost_{max} - cost_{min})x^6$$ are saved.
+* Cost is a weighted sum of pose control, Root control, end-effector control, balance control
+! Results
+* Control Reconstruction was largely successful by varying the nSample and nSave parameters.
+* Only requires one example trial as opposed to a statistical generative model
+* Motion transformation is robust and realistic as the body is able to react to changing physical environments
+* Able to see the pressures from the contacts between the doll and the ground
+* Motion retargeting tries to move the kinematic motion onto a different physical model
+* Motion retargeting quality largely affected by the structure and placement of DOF on the physics body
+* Idling  looks very realistic to adhoc animations to idling
+* Motion Composition tries to transition between different controllers via cut points within the motion trajectory
+* In most cases, character collapses to ground and tries to find an appropriate controller to get to. PD contorl is then enacted to get to that spot
+! Discussion
+* Scalable. 80-core computer cluster = 25s to simulate 1s
+* Implement backtracking so that algorithm can revisit samples that may have been bad
+* Controls are not robust with respect to external perturbations or environmental changes</pre>
+</div>
 <div created="20160516225034391" modified="20160517205124789" tags="Controls" title="SIMBICON: Simple Biped Locomotion Control - 2007">
 <pre>!! Motivation
 * Physics based simulation and control is difficult for biped locomotion due to unstability, underactuation, &amp; high-dimensions
@@ -7160,7 +7206,7 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Qualitative tests conducted on Mechanical Turk
 </pre>
 </div>
-<div created="20160505050941382" modified="20160720234320890" title="Table of Contents">
+<div created="20160505050941382" modified="20160722001807248" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
@@ -7169,6 +7215,7 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * [[Spectral Style Transfer for Human Motion between Independent Actions - 2016]]
 * [[Continuation Methods for Adapting Simulated Skills - 2008]]
 * [[Robust Task-based Control Policies for Physics-based Characters - 2009]]
+* [[Sampling-based Contact-rich Motion Control - 2010]]
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
