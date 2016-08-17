@@ -257,11 +257,17 @@ Error message and password prompt
 
 <li>Continuation Methods for Adapting Simulated Skills - 2008</li>
 
+<li>Controlling Physics-based Characters Using Soft Contacts - 2011</li>
+
+<li>Flexible Muscle-based Locomotion for Bipedal Creatures - 2013</li>
+
 <li>May 16th - Rag Doll Beginnings</li>
 
 <li>May 3rd - Beginnings of Research term</li>
 
 <li>May 9th - Research basics</li>
+
+<li>Pareto Optimal Control for Natural and Supernatural Motions</li>
 
 <li>Robust Task-based Control Policies for Physics-based Characters - 2009</li>
 
@@ -272,6 +278,8 @@ Error message and password prompt
 <li>Spectral Style Transfer for Human Motion between Independent Actions - 2016</li>
 
 <li>Table of Contents</li>
+
+<li>Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012</li>
 
 <li>Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016</li>
 
@@ -6497,7 +6505,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Sampling-based Contact-rich Motion Control - 2010]] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Table of Contents]] [[SIMBICON: Simple Biped Locomotion Control - 2007]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7047,6 +7055,82 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ** Too small of a weight on the term causes no advancement since the method doesn't want to deviate too much from its initial parameters.
 ** Too large of a weight on the term causes rapid greedy continuation and creates erratic motions and non-smoothness</pre>
 </div>
+<div created="20160816212730535" modified="20160817191254226" tags="Controls" title="Controlling Physics-based Characters Using Soft Contacts - 2011">
+<pre>! Motivation
+* Fundamental simplification of Human motion synthesis is that motion is the product of articulated rigid body system with actuated joints representing bones and active skeletal muscles
+* Controllers work well in specific problem domain but cannot achieve same level of agility that human motion displays
+* Collisions with rigid bodies result in sporadic contact points and highly disconnected pressure distribution
+* Simplified rigid contact model inadvertently increases difficulty of controller design and results in unrealistic motion
+* Soft tissue deformation at the site of contact can achieve robust and realistic motion
+* Character with soft contacts withstand larger perturbations in noisy environment without needing to design more complicated controllers
+* Produce deformation for more physically correct contacts
+* Average human body deforms marginally due to the support of bones
+* Aim to create unified simulation framework for controlling a variety of human movements
+! Proposed Solution
+* A simple and accurate model that only computes the surface of deformable bodies, rather than the entire volume
+* Rigid body is surrounded by a set of point masses representing the surface of flesh
+* Dynamics of bones and flesh expressed in a unified manner by Lagrangian equations of motion 
+* Elastic forces applied to each point mass are modeled as linear spring forces
+** Vertex deformation = Measure deformation from its rest position. There is a restoring spring force
+** Edge deformation = Deformation of edge connecting two vertices 
+* The forces attempt to keep the mesh in its undeformed state and also penalize translation and rotation of entire mesh
+* Each point mass is attached to the rigid node through a 3 DOF translation joint
+* Only simulate subset of vertices at site of contact, treat the rest as a surface grid
+** Change the stiffness at the rest of the point masses
+** Simulate marked vertices until they are no longer in contact and reach equilibrium at their rest positions
+** Precompute contribution of point masses in their rest positions 
+** At runtime, visit all simulated point masses that are potentially not at their rest position, and subtract their rest pose contribution to the mass matrix 
+* Discrete equations for computing spring forces (?) and predicting states/mass distribution (?)
+* Contact model for discovering the contact forces (?)
+! Experimental Setup
+* Replace Contact forces from ODE of SIMBICON with own contact handling
+* Add an extra term to the converted generalized torques to approximate the effect of an implicit integration scheme
+! Results
+* Results in less frequent computation
+* Deformable bodies allows more contact points on the ground with more evenly distributed pressure 
+* Introducing noise to joint torques to rigid body quickly makes it unstable while deformable bodies is able to maintain balance and withstand large pushes
+* Deformable foot mesh of soft character conforms better to noisy surfaces and maintains contact points when character is pushed.
+* Soft hand maintains more contact points and smoother movement of the center of pressure at all times
+* Soft character able to fold arms and move smoothly to desired pose
+* Flexible rigid is less stable than soft deformation
+! Discussion
+* To achieve more realistic deformation, we need to acquire accurate material coefficients and design more anatomically correct models
+* Does not take into account self collision
+* Future work needs to explore better collision algorithms for modeling human motion</pre>
+</div>
+<div created="20160803171533594" modified="20160803182843421" tags="Controls" title="Flexible Muscle-based Locomotion for Bipedal Creatures - 2013">
+<pre>! Motivation
+* Motion capture is limited to what kinds of data is available to capture
+* Biomechanical constraints are not preserved during motion editing or retargeting 
+* Optimization may lead to unnatural torque patterns
+* A control method and optimization strategy for simulated locomotion of fully 3D biped creatures including imaginary creatures driven by muscle-based actuation
+* Method requires approximate template of muscle attachment locations
+* Method enables creature-generic and motion-generic control architecture
+! Proposed Solution
+* Each muscle consists of different components that contribute to the overall force that the muscle exerts on the body
+* Muscle gets activated from the control based on a neural excitation signal
+* Muscle apply forces that change skeleton pose, skeleton pose fully determines the muscle length, which then infuences the contraction dynamics
+* Update finite state machine based on current leg state
+* Compose set of target poses for minimal set of featured body parts
+* Compute excitation signals for muscle forces to drive body parts toward target positions and orientations
+* Each leg has a separate finite state machine
+* Target orientation for trunk body, head body, and leg segments (upper, lower, foot)
+** Head target constant for sagittal and coronal but rotated to match heading in transversal plane
+** Target position is a fixed offset in the trunk coordinate frame
+** Head has target linear velocity and direction and magnitude. Angular velocity is 0
+* Try to find muscle activation levels that cause relevant muscle to drive featured bodies towards respective targets using a variation of Jacobian Transpose Control
+* Find a set of muscle torques that emulate the effect of a virtual force or torque applied to a body
+* There is a delay that simulates the time it takes from the brain to the muscle
+** Use fixed time feedback delays based on the distance between the body to the brain
+* Objective function is to minimize the sum of weighted errors found from speed, head orientation, head velocity, sliding, and effort
+! Experimental Results
+* Acquire different gaits by varying the optimization target speed
+* By changing the targets, the optimization takes care of finding the correct parameters to set for the muscles
+* Controllers are somewhat less robust but display more natural responses during lateral perturbations because framework uses neural delay with muscles for all feedback paths
+! Discussion
+* Disabling biomechanical constraints cause the character to move stiffly 
+* Muscle based controllers operate at such a low level that it introduces a ton of parameters that may or may not be worth it depending on the desired fidelity of the motion</pre>
+</div>
 <div created="20160516220713629" modified="20160516222905684" tags="" title="May 16th - Rag Doll Beginnings">
 <pre>!! TODO
 * Build a 7 or 12 link person model
@@ -7076,6 +7160,31 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ** 2 joints at the hip 1 for swing and one for stance
 * Add simbicon swing leg feedback to achieve balanced stepping
 * MIT Hopping robot Mark</pre>
+</div>
+<div created="20160805152743101" modified="20160808122430570" tags="Controls" title="Pareto Optimal Control for Natural and Supernatural Motions">
+<pre>! Motivation
+* Pareto Optimality = set of high dimensional value assignments where an improvement in any particular dimension adversely affects some other dimension
+* Compute Pareto optimal solutions to explore tradeoffs between various terms in objective function for jumping
+! Proposed Solution
+* Manually designed controller for jumping
+* Different states for the jump start-&gt;crouch-&gt;extend-&gt;rising-&gt;falling-&gt;landing-&gt;rest
+* Effort of each joint is found empirically and is represented as multiplicative weights on the joints.
+* Binned Single Objective Optimization strategy. Classifies jumps into bins of varying jump heights and uses single objective optimization for each bin. For comparison
+* Multi-Objective algorithm avoids redundant sampling that BSOO does
+! Experimental Setup
+* PD Controllers @ every joint
+* BSOO split task (jump height) into 16 uniformly spaced bin each representing a height constraint
+* Optimization is stopped if improvements are less than $$\epsilon$$ over a span of 300 generations or total number of generations exceeds 3000
+* Once optimization is achieved for a certain bin, it is used as starting point for next bin
+* Multi-objective optimization is to find a diverse set of solutions in order to generate a set of good trade-offs between various incommesurate objectives
+* Make the character favor using internal energy than relying on external forces.
+! Results
+* Resampling strategy produces significantly better pareto optimal front at a computational cost.
+* Solution space topology is better explored through a concerted effort from multiple CMA algorithms running in parallel
+* Character prefers to use internal forces to help achieve required jump height even when in supernatural regime so styles are similar.
+! Discussion
+* Making success criteria tighter significantly increased computational cost while pareto-optimal front generated was quite similar in quality to that produced using proposed success criteria
+* Relaxing success criteria from its current value degraded the quality of the pareto-optimal front significantly.</pre>
 </div>
 <div created="20160720234236676" modified="20160721223833144" tags="Controls" title="Robust Task-based Control Policies for Physics-based Characters - 2009">
 <pre>! Motivation
@@ -7206,7 +7315,7 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Qualitative tests conducted on Mechanical Turk
 </pre>
 </div>
-<div created="20160505050941382" modified="20160722001807248" title="Table of Contents">
+<div created="20160505050941382" modified="20160817191309707" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
@@ -7216,10 +7325,39 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * [[Continuation Methods for Adapting Simulated Skills - 2008]]
 * [[Robust Task-based Control Policies for Physics-based Characters - 2009]]
 * [[Sampling-based Contact-rich Motion Control - 2010]]
+* [[Flexible Muscle-based Locomotion for Bipedal Creatures - 2013]]
+* [[Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012]]
+* [[Controlling Physics-based Characters Using Soft Contacts - 2011]]
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
 * [[May 16th - Rag Doll Beginnings]]</pre>
+</div>
+<div created="20160808122620506" modified="20160816204524015" tags="Controls" title="Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012">
+<pre>! Motivation
+* Reference motions are difficult to capture. 
+** Requires large space, special equipment, trained athletes
+* Robust motion controllers require robust domain knowledge and human insight
+* Sequential composition of highly dynamic skills is difficult to develop using existing approaches for physics-based control
+! Proposed Solution
+* Require only a sparse set of motion capture examples
+* Automated method that is broadly applicable to a variety of motions 
+* Parameterization = Given single motion-capture example clip for each skill, develop closed-loop feedback controllers for parameterized versions of the motion
+* Sequential Composition = Structured composition scheme for transitioning between running and obstacle clearing maneuvers
+* Deploy control blending for connecting the transitions
+* Uses a SIMBICON-style running controller for balance control
+* Motion is characterized with free parameters denoting the desired effects to observe
+* Uses CMA in repetition and in chunks to be fed into the next thing to optimize
+* Planning is done locally. One obstacle at a time
+! Experimental Setup
+* Swept through a range of distances away from the obstacle to clear.
+! Results
+* Success rate is pretty good with 87%, 90%, and 83% success for jump, speed-vault, and drop-roll
+! Discussion
+* Framework is only partially automated with only a limited skillset
+* Addition of new skill requires authoring of the objective function, insight into the phases of motion, and insight into relevant features and action variables for the motion
+* Further develop motion planning strategies for anticipation, affordances, and predictions
+* Robustness can be improved</pre>
 </div>
 <div created="20160509181813861" modified="20160509203811821" tags="[[Reinforcement Learning]]" title="Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016" type="">
 <pre>!! Motivation
