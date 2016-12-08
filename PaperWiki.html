@@ -261,6 +261,8 @@ Error message and password prompt
 
 <li>Flexible Muscle-based Locomotion for Bipedal Creatures - 2013</li>
 
+<li>Learning Bicycle Stunts - 2014</li>
+
 <li>May 16th - Rag Doll Beginnings</li>
 
 <li>May 3rd - Beginnings of Research term</li>
@@ -269,9 +271,13 @@ Error message and password prompt
 
 <li>Pareto Optimal Control for Natural and Supernatural Motions</li>
 
+<li>Playing Atari with Deep Reinforcement Learning - 2013</li>
+
 <li>Robust Task-based Control Policies for Physics-based Characters - 2009</li>
 
 <li>Sampling-based Contact-rich Motion Control - 2010</li>
+
+<li>Shadow Theatre: Discovering Human Motion from a Sequence of Silhouettes - 2016</li>
 
 <li>SIMBICON: Simple Biped Locomotion Control - 2007</li>
 
@@ -6496,7 +6502,7 @@ Error message and password prompt
 <div created="20160505050837537" modified="20160505050848142" title="$:/SiteTitle">
 <pre>My Research Papers Wiki</pre>
 </div>
-<div created="20160505051323075" modified="20160720184144192" title="$:/state/showeditpreview">
+<div created="20160505051323075" modified="20161021174444638" title="$:/state/showeditpreview">
 <pre>no</pre>
 </div>
 <div created="20160509183652604" modified="20160509183652604" title="$:/state/tab-1749438307">
@@ -6505,7 +6511,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Table of Contents]] [[SIMBICON: Simple Biped Locomotion Control - 2007]]" title="$:/StoryList">
+<div list="[[Playing Atari with Deep Reinforcement Learning - 2013]] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7131,6 +7137,40 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Disabling biomechanical constraints cause the character to move stiffly 
 * Muscle based controllers operate at such a low level that it introduces a ton of parameters that may or may not be worth it depending on the desired fidelity of the motion</pre>
 </div>
+<div created="20161021171311355" modified="20161021184527466" tags="[[Reinforcement Learning]] Motion" title="Learning Bicycle Stunts - 2014">
+<pre>! Motivation
+* Challenging under actuated control problem
+* Stimulus response can indeed be used to control high dimensional models for complex motion
+! Proposed Solution
+* Partially Observable Markov Decision Process with Policy Search
+** (S, A, R, D, $$P_{sas'}$$, $$\gamma$$)
+** State, Action, Reward, Distribution over initial states, Transition Probability, Discount factor
+** Initial state is drawn from random perturbation near upright orientation of bicycle
+** ''Is the MDP robust to external changes?''
+* Neural Network Evolution method to optimize parametrization and parameters of feedback 
+controllers
+* Policy search to optimize control policies
+* One or more random policies are generated as an initial guess
+* Policy improvement is guided by policy gradient 
+* NEAT searches both structure of the neural network and its weights simultaneously
+* Reward function = $$R(s) = R_t(s) + w R_r(s)$$
+** $$R_t$$ is the task specific reward and $$R_r$$ is the regularization term 
+* Multiple simulations with different initial configurations sampled from random perturbations of default bicycle velocity and orientation to evaluate value of policy
+* NEAT starts with simple network architecture
+** Random weights are drawn as initial guess
+** Candidate policies are evaluated and top 20% are selected to survive
+** Pairs of policies are crossed over to produce new generation 
+** Mutations perturb connection weights, add neuron or add a connection
+! Results
+* NEAT performed well on all scenarios
+! Discussion
+* Compared CMA to search for the weights while NEAT evolved both weights and network structure
+* Two step training: Trained on longitudinal scenario then trained on latitude scenario
+* choosing appropriate actions for specific task requires domain knowledge
+* Effort minimization competes with task-specific objective
+* Hard to concatenate stunt controllers arbitrarily
+</pre>
+</div>
 <div created="20160516220713629" modified="20160516222905684" tags="" title="May 16th - Rag Doll Beginnings">
 <pre>!! TODO
 * Build a 7 or 12 link person model
@@ -7185,6 +7225,31 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 ! Discussion
 * Making success criteria tighter significantly increased computational cost while pareto-optimal front generated was quite similar in quality to that produced using proposed success criteria
 * Relaxing success criteria from its current value degraded the quality of the pareto-optimal front significantly.</pre>
+</div>
+<div created="20161027171723467" modified="20161027184027932" tags="[[Reinforcement Learning]]" title="Playing Atari with Deep Reinforcement Learning - 2013" type="">
+<pre>! Motivation
+* To learn from high dimensional sensory inputs
+* To model the way a human would learn
+* Agent interacts with environment by receiving a vector of raw pixel values and reward from game environment. 
+! Proposed Solution
+* Interact with emulator that maximizes future rewards
+* Use function approximator to estimate action-value function 
+* Model free algorithm: solves reinforcement learning task without making a model/estimate of the emulator
+* Off-policy: Learns about the greedy strategy while following behaviour distribution ensuring adequate exploration of state space. 
+* Learning directly from consecutive samples is inneficient because of strong correlations between samples
+* Randomizing sample breaks correlations and reduces variance of updates
+* Experience replay allows the behavior distribution to be averaged over previous states, smoothing learning and avoiding oscillations or divergence in parameters
+* Separate output unit for each possible action
+! Experimental Setup
+* Fixed all positive rewards to 1 and all negative rewards to -1, leaving 0 unchanged
+* Epsilon greedy annealed from 1 to 0.1 
+* Agent sees and selects action on every kth frame instead of every frame
+! Results
+* Compared results to handcrafted Atari game features
+* Compared scores on random action selection and human players
+* Gave better performance than expert human players on 3 games and achieved equal performance on 1 game.
+! Conclusion &amp; Discussion
+* Network is more challenged to find strategies that extend over longer time scales</pre>
 </div>
 <div created="20160720234236676" modified="20160721223833144" tags="Controls" title="Robust Task-based Control Policies for Physics-based Characters - 2009">
 <pre>! Motivation
@@ -7273,6 +7338,44 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Implement backtracking so that algorithm can revisit samples that may have been bad
 * Controls are not robust with respect to external perturbations or environmental changes</pre>
 </div>
+<div created="20160929162022954" modified="20160929181655066" tags="Motion" title="Shadow Theatre: Discovering Human Motion from a Sequence of Silhouettes - 2016">
+<pre>! Motivation
+* Compute/generate motion of 3d characters that cast shadows to match the target
+* Multiple actors must collaborate and coordinate for success
+* Completeness of resulting shadows where outlines should match target shape and internal area should be filled
+* Technique uses heuristics 
+! Proposed Solution
+* Input is a target shadow represented as binary image
+* Output is a set of N actors' poses $${M_1, M_2, ..., M_n}$$ that projects shadows $$S_1 \cup S_2 \cup ... \cup S_n$$ that satisfy target shadow
+!! Strategy 1
+* Principal poses - adapt principal poses gradually over frames
+!! Strategy 2
+* Distinctive features - extensive prior knowledge of what parts constitute what shapes
+!! Strategy 3
+* View Direction - Actors should be able to adjust themselves to the screen
+!! Strategy 4
+* Balance - Stability is preferred
+!! Strategy 5
+* Scaling - Fewer should join for smaller shapes, vice versa
+!! Strategy 6
+* Minimal motion - Attempting to shift as little as possible during poses
+* Principal pose discovery as non-linear optimization of an energy function
+** $$\arg\min_{M_1,M_2,..., M_n} E_{contour} + E_{coverage} + E_{coherence} + E_{visible} + E_{physics} + E_{hint}$$
+* Optimization uses CMA-ES as basis but gets stuck in local extrema, so use extra steps for better solution
+* Identify chain of completely occluded body parts
+* Reduce dimensionality of problem by including DOF that may contribute to removing visual artifacts
+* CMA-ES with reduced DoFs converges to better solutions
+* If refinements are still unsatisfactory, add new actor to the scene
+* Repeat until satisfactory
+! Experimental Results
+* Result should be recognizable
+* Result should reproduce key features of target silhouette
+! Discussion/Conclusion
+* Most challenging part was to make optimization converge with reasonable computing resources
+* Key to success was the design of objective functions
+* Heuristic strategies from actors narrowed down search space
+* Computer graphics as a means for planning performance</pre>
+</div>
 <div created="20160516225034391" modified="20160517205124789" tags="Controls" title="SIMBICON: Simple Biped Locomotion Control - 2007">
 <pre>!! Motivation
 * Physics based simulation and control is difficult for biped locomotion due to unstability, underactuation, &amp; high-dimensions
@@ -7315,10 +7418,12 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * Qualitative tests conducted on Mechanical Turk
 </pre>
 </div>
-<div created="20160505050941382" modified="20160817191309707" title="Table of Contents">
+<div created="20160505050941382" modified="20161027172102076" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
+* [[Learning Bicycle Stunts - 2014]]
+* [[Playing Atari with Deep Reinforcement Learning - 2013]]
 !! Controls
 * [[SIMBICON: Simple Biped Locomotion Control - 2007]]
 * [[Spectral Style Transfer for Human Motion between Independent Actions - 2016]]
@@ -7328,6 +7433,9 @@ This plugin contains tools to help slice up long texts into individual tiddlers.
 * [[Flexible Muscle-based Locomotion for Bipedal Creatures - 2013]]
 * [[Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012]]
 * [[Controlling Physics-based Characters Using Soft Contacts - 2011]]
+!! Motion
+* [[Shadow Theatre: Discovering Human Motion from a Sequence of Silhouettes - 2016]]
+
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
