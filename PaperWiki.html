@@ -287,9 +287,13 @@ Error message and password prompt
 
 <li>Table of Contents</li>
 
+<li>Terrain Classification and Negotiation with a Walking Robot - 2014</li>
+
 <li>Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012</li>
 
 <li>Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016</li>
+
+<li>Using Gait Change for Terrain Sensing By Robots - 2013</li>
 
 </ul>
 </p>
@@ -6513,7 +6517,7 @@ Error message and password prompt
 <div created="20160505051130731" modified="20160509183905315" title="$:/state/tab/sidebar--1835078512">
 <pre>$:/core/ui/SideBar/Recent</pre>
 </div>
-<div list="[[Learning Motion Manifolds with Convolutional Autoencoders]] [[Table of Contents]]" title="$:/StoryList">
+<div list="[[Terrain Classification and Negotiation with a Walking Robot - 2014]] [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -7449,7 +7453,7 @@ controllers
 * Qualitative tests conducted on Mechanical Turk
 </pre>
 </div>
-<div created="20160505050941382" modified="20161208215633063" title="Table of Contents">
+<div created="20160505050941382" modified="20170308010209819" title="Table of Contents">
 <pre>!! Reinforcement Learning
 * [[Benchmarking Deep Reinforcement Learning For Continuous Control - April 2016]]
 * [[Terrain-Adaptive Locomotion Skills using Deep Reinforcement Learning - July 2016]]
@@ -7467,10 +7471,35 @@ controllers
 !! Motion
 * [[Shadow Theatre: Discovering Human Motion from a Sequence of Silhouettes - 2016]]
 * [[Learning Motion Manifolds with Convolutional Autoencoders - 2016]]
+!! Robotics
+* [[Using Gait Change for Terrain Sensing by Robots - 2013]]
+* [[Terrain Classification and Negotiation with a Walking Robot - 2014]]
 !! Meets with Michiel
 * [[May 3rd - Beginnings of Research term]]
 * [[May 9th - Research basics]]
 * [[May 16th - Rag Doll Beginnings]]</pre>
+</div>
+<div created="20170308010200572" modified="20170308015744755" tags="" title="Terrain Classification and Negotiation with a Walking Robot - 2014">
+<pre>! Motivation
+* Enhance the autonomy of the walking robot
+* Achieve good balance between speed of movement and vibration caused by bounciness and irregularities of the terrain
+* Adjust gait characteristics to ground type
+! Proposed Solution
+* Uses RGB, depth, and tactile information
+! Experimental Setup
+* 12 types of terrain used
+* depth data acquired using kinect
+* force and torque signals acquired with sensors. ($$F_x, F_y, F_z, T_x, T_y, T_z$$)
+* For each signal, compute statistical properties.
+* FFT on the forces and torques that were gathered for additional features
+* HSV for classification based on color
+* SVM on 12 classes.
+! Results
+* Using point cloud data  not that great.
+* Combining all features for classification offered the best classifier
+! Conclusion
+* Obtained good accuracy by combining vision, tactile, and depth.
+* Controller can use perception system to modify gait and adjust speed of robot movements to obtain speed and balance and reduce energy loss.</pre>
 </div>
 <div created="20160808122620506" modified="20160816204524015" tags="Controls" title="Terrain Runner: Control, Parameterization, Composition, and Planning for Highly Dynamic Motions - 2012">
 <pre>! Motivation
@@ -7552,6 +7581,35 @@ controllers
 * Critic buffer does not show significant benefit 
 * MACE(3) yields best learning performance
 * Policies don't generalize to unfamiliar terrains very well.</pre>
+</div>
+<div created="20170308001715443" modified="20170308005812620" tags="Robotics" title="Using Gait Change for Terrain Sensing By Robots - 2013">
+<pre>! Motivation
+* Use unsupervised classification algorithm to classify terrain.
+* Agent should identify terrain to chose optimal speed.
+* Adapt gait to particular terrain
+* Gait used on terrain are different from each other
+! Proposed Solution
+* Hexapod robot where 3 legs are contacting the floor.
+* Optimal gait: energy efficiency of gait, mechanical constraint on legs of agent, terrain on which it is walking
+* Achieve highest physical speed, operates at power efficient speeds, or a trade off between both
+! Experimental setup
+* Compute physical speed from robot by measuring time from recorded video and using the physical distance. 
+* Recorded battery current and voltage between runs to compute power. 
+* Gathered this data for different gaits across different terrains.
+* Five cycle-frequencies 
+! Results
+* Higher physical speeds on hard terrains are capped to a speed setting.
+* Soft terrains offer more traction and therefore more speed with higher speed settings.
+* Sampled data at different angles of leg rotation cycle to perform terrain differentiability
+* Terrain isn't well separated for some speed settings while very well separated for others. This information is useful for identification
+* Minimizing cost function to minimize variation of classifier posterior probabilities over time.
+* The probability of predicting the class for the next data point should be similar to the probability of predicting the class for the current data point.
+* Speed setting of 0.4 is optimal for classification of most terrains
+* Able to use unsupervised algorithm to achieve similar results to supervised learning
+! Conclusions
+* Controlling cycle-frequency can achieve trade-off between physical speed and power consumption of robot
+* Saw increase in efficiency of terrain classification algorithm by varying cycle-frequency of leg rotation
+* Active gait selection should improve classification accuracy</pre>
 </div>
 
 </div>
